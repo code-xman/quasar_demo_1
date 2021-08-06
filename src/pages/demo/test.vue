@@ -1,0 +1,61 @@
+<!-- Created by xj on 2021-04-28. test -->
+<template>
+  <div class="test">
+    <q-select
+      filled
+      v-model="model"
+      use-chips
+      label="Lazy load opts"
+      :options="options"
+      @filter="filterFn"
+      @filter-abort="abortFilterFn"
+      style="width: 250px"
+    >
+      <template v-slot:no-option>
+        <q-item>
+          <q-item-section class="text-grey">
+            No results
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-select>
+  </div>
+</template>
+<script>
+import { ref } from "@vue/composition-api";
+export default {
+  name: "test",
+  setup() {
+    const stringOptions = [
+      'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+    ]
+    const model = ref(null)
+    const options = ref(null)
+    const filterFn = (val, update, abort) => {
+      if (options.value !== null) {
+        // already loaded
+        update()
+        return
+      }
+
+      setTimeout(() => {
+        update(() => {
+          options.value = stringOptions
+        })
+      }, 2000)
+    }
+    const abortFilterFn = () => {
+      // console.log('delayed filter aborted')
+    }
+
+    return {
+      model,
+      options,
+      filterFn,
+      abortFilterFn,
+    }
+
+  }
+};
+</script>
+<style lang="scss" scoped></style>
